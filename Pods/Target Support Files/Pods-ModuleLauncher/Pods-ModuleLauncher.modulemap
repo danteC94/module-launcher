@@ -1,0 +1,6 @@
+framework module Pods_ModuleLauncher {
+  umbrella header "Pods-ModuleLauncher-umbrella.h"
+
+  export *
+  module * { export * }
+}
