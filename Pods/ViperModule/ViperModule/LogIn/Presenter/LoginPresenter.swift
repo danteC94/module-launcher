@@ -8,9 +8,9 @@
 import Foundation
 
 class LoginPresenter {
-    var loginView: PresenterToLoginViewProtocol?
-    var interactor: PresenterToInteractorProtocol?
-    var router: PresenterToRouterProtocol?
+    weak var loginView: LoginPresenterToLoginViewProtocol?
+    var interactor: LoginPresenterToLoginInteractorProtocol?
+    var router: LoginPresenterToLoginRouterProtocol?
 }
 
 extension LoginPresenter: LoginViewToPresenterProtocol {
@@ -19,16 +19,16 @@ extension LoginPresenter: LoginViewToPresenterProtocol {
     }
 }
 
-extension LoginPresenter: InteractorToPresenterProtocol {
+extension LoginPresenter: LoginInteractorToLoginPresenterProtocol {
     func userFetchSuccess(email: String) {
-        print("Success")
+        self.router?.pushEconomicIndicesModule(email: email)
     }
     func userFetchFailure() {
         self.loginView?.showErrorMessage()
     }
 }
 
-extension LoginPresenter: RouterToPresenterProtocol {
+extension LoginPresenter: LoginRouterToLoginPresenterProtocol {
     func setUpDataBase() {
         self.interactor?.setUpDataBase()
     }

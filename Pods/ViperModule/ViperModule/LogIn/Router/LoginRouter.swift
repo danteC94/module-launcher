@@ -7,27 +7,28 @@
 
 import UIKit
 
-class LoginRouter: PresenterToRouterProtocol {
-    var presenter: RouterToPresenterProtocol?
-    func createModule() -> LoginViewController {
-        let loginView = LoginViewController(nibName: "LoginViewController", bundle: Bundle(for: LoginViewController.self))
-        let presenter = LoginPresenter()
-        let interactor = Interactor()
+public class LoginRouter {
+    weak var presenter: LoginRouterToLoginPresenterProtocol?
+    var presentingViewController: UINavigationController?
 
-        self.presenter = presenter
-        loginView.presenter = presenter
-        presenter.loginView = loginView
-        presenter.router = self
-        presenter.interactor = interactor
-        interactor.presenter = presenter
-
-        self.presenter?.setUpDataBase()
+    func createModule(navigationController: UINavigationController, moduleAssembler: LoginModuleAssemblerProtocol) -> UIViewController {
+        self.presentingViewController = navigationController
+        let loginView = moduleAssembler.assembleModule(router: self)
 
         return loginView
     }
 
-    func showEconomicIndicesView(navVC: UINavigationController) {
-        // let economicIndicesModule = EconomicIndices.createmodule
-        // navVC.pushViewController(economicIndicesModule)
+    func setUpDataBase() {
+        self.presenter?.setUpDataBase()
+    }
+}
+
+extension LoginRouter: LoginPresenterToLoginRouterProtocol {
+    func pushEconomicIndicesModule(email: String) {
+        guard let presentingViewController = self.presentingViewController else { return }
+
+        let view = EconomicIndicesRouter().createModule(navigationController: presentingViewController, userEmail: email)
+        presentingViewController.pushViewController(view, animated: true)
+        
     }
 }

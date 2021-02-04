@@ -9,28 +9,43 @@ import Foundation
 import UIKit
 
 protocol LoginViewToPresenterProtocol {
+    var loginView: LoginPresenterToLoginViewProtocol? { get set }
+
     func checkCredentials(email: String, pass: String)
 }
 
-protocol PresenterToLoginViewProtocol {
+protocol LoginPresenterToLoginViewProtocol: class {
+    var presenter: LoginViewToPresenterProtocol? { get set }
+
     func showErrorMessage()
 }
 
-protocol InteractorToPresenterProtocol {
+protocol LoginInteractorToLoginPresenterProtocol: class {
+    var interactor: LoginPresenterToLoginInteractorProtocol? { get set }
+
     func userFetchSuccess(email: String)
     func userFetchFailure()
 }
 
-protocol PresenterToInteractorProtocol {
+protocol LoginPresenterToLoginInteractorProtocol {
+    var presenter: LoginInteractorToLoginPresenterProtocol? { get set }
+
     func fetchUser(email: String, pass: String)
     func setUpDataBase()
 }
 
-protocol PresenterToRouterProtocol {
-    func createModule() -> LoginViewController
-    func showEconomicIndicesView(navVC: UINavigationController)
+protocol LoginPresenterToLoginRouterProtocol {
+    var presenter: LoginRouterToLoginPresenterProtocol? { get set }
+
+    func pushEconomicIndicesModule(email: String)
 }
 
-protocol RouterToPresenterProtocol {
+protocol LoginRouterToLoginPresenterProtocol: class {
+    var router: LoginPresenterToLoginRouterProtocol? { get set }
+
     func setUpDataBase()
+}
+
+protocol LoginModuleAssemblerProtocol {
+    func assembleModule(router: LoginRouter) -> UIViewController
 }
